@@ -5,96 +5,101 @@
 
 # @@## Move to global.R
 # Import libraries
-library(shinythemes)
-library(leaflet)
+
 
 # Define UI layout: navbarPage layout (5 tabs pages)
 # Five tab pages:
       # 1. Homepage: A gif bakcground with some quotes.
-      # 2. ToLive: AirBnb + WalkScore + NYCOpenData(Crime) + Yelp + RangePolygon(From WalkScore)
-      # 3. ToExplore: Some visualization about the graph.
-      # 4. ToGo: Plan transit extra powered by Google + Weather
+      # 2. MulFuncMap: AirBnb + WalkScore + NYCOpenData(Crime) + Yelp + RangePolygon(From WalkScore)
+      # 3. ExploreMap: Some visualization about the graph.
+      # 4. TransitMap: Plan transit extra powered by Google + Weather
       # 5. About: Github + LinkedIn + Blog; Data Sources
 
 ##### Define website title and theme. #####
 ui = navbarPage(title = "NYC Living Recommendation System",
                 id    = "navPage",
-                theme = shinytheme("cerulean")
+                theme = shinytheme("cerulean"),
 
       
 
 ##### 1. Homepage: A gif bakcground with some quotes. #####
-      tabPanel(id = "Homepage",
-        # Add div details
-          div(class="outer", tags$head(includeCSS("styles.css")),
+      tabPanel(title = "Homepage",
+        br(),
+        br(),
+        h1("default"),
+        h1("placeholder", placeholder = TRUE),
+        HTML('<center><img src="beauty.jpg", height = 400, weight = 800 ></center>'),
+        helpText("Note: while the data view will show only",
+         "the specified number of observations, the",
+         "summary will be based on the full dataset.")
+        ),
+
+##### 2. MulFuncMap: AirBnb + WalkScore + NYCOpenData(Crime) + Yelp + RangePolygon(From WalkScore) #####
+      tabPanel(title = "MulFuncMap",
+        
+        div(
           
-
-
+          # Set CSS for full screen map
+          class="outer",
+          tags$head(includeCSS("./www/styles.css")),
+                 
+                 
+          # Add Map       
+          leafletOutput(outputId = "Lmap", width = "100%", height = "100%"),
+          
+          # Add Control Panel
+          absolutePanel(id = "controls", class = "panel panel-default", fixed = TRUE, draggable = TRUE, 
+                      top = 80, bottom = "auto", left = 20, right = "auto",
+                      width =400, height = "auto",
+          h2("Place in NYC"),
+          
+          # Time to stay
+          sliderTextInput(inputId = "selectMonth", 
+                          label = "Please select when you will visit NYC:", 
+                          choices = month.abb, selected = month.abb[c(1,4)]),
+          
+          # Safety Level
+          sliderTextInput(inputId = "selectSafety", 
+                          label = "Safety level:", 
+                          choices = safetyScoreLevel,
+                          selected = safetyScoreLevel[3]),
+          # Food Level
+          sliderTextInput(inputId = "selectFood", 
+                          label = "Food level:", 
+                          choices = foodScoreLevel,
+                          selected = foodScoreLevel[3]),
+          # Walk Level
+          sliderTextInput(inputId = "selectWalk", 
+                          label = "Walk-friendly level:", 
+                          choices = walkScoreLevel,
+                          selected = walkScoreLevel[3]),
+          # Price Level
+          sliderInput(inputId = "sliderPrice", 
+                      label = "Price", 
+                      min = 1, max = 300, step = 20,
+                      pre = "$", sep = ",", value = c(80, 200)),
+          
+          # Plot Tempearture for the selected dates
+          plotOutput("tempAvg", height = 200),
+          
+          # Plot Precipitation for the selected dates
+          plotOutput("rainFall", height = 200)
+          
+          )
+         ) 
         ),
 
+##### 3. ExploreMap: Some visualization about the graph. #####     
+      tabPanel(title = "ExploreMap"),
 
-
-##### 2. ToLive: AirBnb + WalkScore + NYCOpenData(Crime) + Yelp + RangePolygon(From WalkScore) #####
-      tabPanel(id = ""
-        ),
-
-##### 3. ToExplore: Some visualization about the graph. #####     
-      tabPanel(id = ""),
-
-##### 4. ToGo: Plan transit extra powered by Google + Weather #####      
-      tabPanel(id = ""),
+##### 4. TransitMap: Plan transit extra powered by Google + Weather #####      
+      tabPanel(title = "TransitMap"),
 
 ##### 5. About: Github + LinkedIn + Blog; Data Sources #####      
-      tabPanel(id = "")
+      tabPanel(title = "About",
+               h1("default")
+               
+               )
 
 
   )
-
-ui = fluidPage(
-  #theme = 'bootstrap.css',
-  theme = shinytheme("cerulean"),
-  titlePanel ('Roger\'s Shiny Projec'),
-  sidebarLayout(
-    sidebarPanel (
-      #h3('What\'s going on'),
-      actionButton('button', 'Click me'),
-      sliderInput(inputId = "myslider", label = "Limit the ", min = 0, 
-                  max = 100, value = c(40, 60)),
-      # a text input box
-      textInput(inputId = "mytext", label = "Text input", value = "Enter text..."),
-      textInput(inputId = 'myresults', label = 'Results will be printed here', value = 'initial value')
-    ),
-    
-    mainPanel(
-      tabsetPanel(
-        
-        # Placeholder tab
-        tabPanel('Me',
-                 'File Loaded'),
-        tabPanel('Crime',
-                 leafletOutput(outputId = "Crime")),
-        tabPanel('NYC',
-                 leafletOutput(outputId = "NYC")),
-        
-        tabPanel('RANGE',
-                 leafletOutput(outputId = "Ren")),
-        
-        # Leaf tab
-        tabPanel('You',
-                 leafletOutput(outputId = "map")),
-        
-        # Google Map tab
-        tabPanel('Google',
-                 google_mapOutput(outputId = "Gmap"),
-                 sliderInput(inputId = "opacity", label = "opacity", min = 0, max = 1, 
-                             step = 0.01, value = 1)),
-        # Gmap2
-        tabPanel('ClickGMAP',
-                 sliderInput(inputId = "opacity2", label = "opacity", min = 0, max = 1, 
-                             step = 0.01, value = 1),
-                 google_mapOutput('Gmap2') )
-       
-      )
-    )
-  )
-)
