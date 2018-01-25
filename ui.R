@@ -24,7 +24,7 @@ ui = navbarPage(title = "NYC Living Recommendation System",
         br(),
         h1("default"),
         h1("placeholder", placeholder = TRUE),
-        HTML('<center><img src="beauty.jpg", height = 400, weight = 800 ></center>'),
+        HTML('<center><img src="darkNYC.jpg", height = 1920, weight = 1080 ></center>'),
         helpText("Note: while the data view will show only",
          "the specified number of observations, the",
          "summary will be based on the full dataset.")
@@ -105,7 +105,7 @@ ui = navbarPage(title = "NYC Living Recommendation System",
                       label = "Time", 
                       min = 0, max = 60, step = 10,
                       post = "min", sep = ",", value = 30),
-          # Call api and draw polygon
+            # Call api and draw polygon
           actionButton("generateTransitPolygon", "Go!")
           
           ),
@@ -130,7 +130,37 @@ ui = navbarPage(title = "NYC Living Recommendation System",
         ),
 
 ##### 3. ExploreMap: Some visualization about the graph. #####     
-      tabPanel(title = "ExploreMap"),
+      tabPanel(title = "ExploreMap",
+         div(
+           
+           # Set CSS for full screen map
+           class="outer",
+           tags$head(includeCSS("./www/styles.css")),
+           
+           # Add Explore Map       
+           leafletOutput(outputId = "Emap", width = "100%", height = "100%"),
+           
+           # Add Explore Control Panel
+           absolutePanel(id = "controls", class = "panel panel-default", fixed = TRUE, draggable = TRUE, 
+                         top = 80, bottom = "auto", left = "auto", right = 20,
+                         width =400, height = "auto",
+                         h2("Choose a style"),
+              # Choose between 3
+              # @@##$$%% change later for different styles
+           prettyRadioButtons(inputId = "exploreMapControl", 
+                              label = "Choose:", 
+                              choices = c("Click me !","Me !", "Or me !"), 
+                              icon = icon("check"), 
+                              inline = TRUE,
+                              bigger = TRUE, status = "info", 
+                              animation = "jelly"),
+           
+              # Select switch
+           switchInput(inputId = "EMapSwitch", 
+                       onStatus = "success", offStatus = "danger")
+           
+         ))
+         ),
 
 ##### 4. TransitMap: Plan transit extra powered by Google + Weather #####      
       tabPanel(title = "TransitMap"),

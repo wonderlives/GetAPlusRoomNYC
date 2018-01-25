@@ -1,5 +1,5 @@
 setwd('~/Shiny/rogerPro/')
-
+source('helperWalkScore.R')
 
 library(leaflet)
 library(googleway)

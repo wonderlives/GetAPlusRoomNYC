@@ -1,9 +1,10 @@
 server = function(input, output, session) {
-  source('helperFunction.R')
+  
  
   
+###### MultiFunc Map Page ######
   
-  # Initialize map
+  # Initialize Lmap
 	output$Lmap = renderLeaflet({
 		leaflet() %>% 
       	addProviderTiles("Stamen.Watercolor") %>%
@@ -69,4 +70,43 @@ server = function(input, output, session) {
     })
   })
 
+
+###### Explore Map Page ######
+  
+  # Initialize Emap
+  output$Emap = renderLeaflet({
+    leaflet() %>% 
+      addProviderTiles("Stamen.Watercolor") %>%
+      #addLegend(position = "bottomleft", pal = groupColors, values = room, opacity = 1, title = "Room Type") %>% 
+      setView(lng = -73.9772, lat = 40.7527, zoom = 12)
+  })
+  
+  # Get click information. 
+  observeEvent(input$Emap_click, {
+    # Read click info
+    #clat = 1
+    #clng = 2
+    click = input$Emap_click
+    clat <<- click$lat
+    clng <<- click$lng
+    print(paste(clat,clng))
+    # Get mode signal
+    nowSelectMode = input$EMapSwitch
+    # Update
+    if (nowSelectMode ) {
+      # Get address
+      address <<- revgeocode(c(clng,clat))
+      print(address)
+      # use the proxy to save computation
+      leafletProxy('Emap') %>% 
+        addCircles(lng=clng, lat=clat, group='circles',
+                   weight=1, radius=100, color='black', fillColor='orange',
+                   popup=address, fillOpacity=0.5, opacity=1,
+                   layerId = 'target')
+    } else {
+      return()
+    }
+  })
+  # Set target marker
+  
 }
