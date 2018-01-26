@@ -70,8 +70,6 @@ server = function(input, output, session) {
     })
   })
   
-  # Module test
-  callModule(module = dropPin, id = "test1", mapName = "Lap" )
 
 
 ###### Explore Map Page ######
@@ -80,7 +78,7 @@ server = function(input, output, session) {
   # Get color based on neighborhood group.
   nyc_code = geojsonio::geojson_read("./data/neighbourhoods.geojson",
                                      what = "sp")
-  pal = colorFactor("RdYlBu", nyv_code@data[["neighbourhood_group"]])
+  pal = colorFactor("RdYlBu", nyc_code@data[["neighbourhood_group"]])
   
   output$Emap = renderLeaflet({
     leaflet(nyc_code) %>% 
