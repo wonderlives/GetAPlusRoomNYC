@@ -1,5 +1,4 @@
-require(tidyverse)
-require(httr)
+
 
 client_id <- "vVeTqC9hHEHclhag6gHlLw"
 client_secret <- "duaQ2KnrmguBZ7qXNVGzQT7n5tdpDBQiNhwVcuVj9SkvDpXik2bpp3Q64I5EPyTT"

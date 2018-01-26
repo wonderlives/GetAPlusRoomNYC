@@ -27,19 +27,19 @@ server = function(input, output, session) {
 	observeEvent(input$Lmap_click, {
 	  # Read click info
 	  click = input$Lmap_click
-	  clat <<- click$lat
-	  clng <<- click$lng
-	  print(paste(clat,clng))
+	  LmapLat <<- click$lat
+	  LmapLng <<- click$lng
+	  print(paste(LmapLat,LmapLng))
 	  # Get mode signal
 	  nowSelectMode = input$targetSelectModeSwitch
 	  # Update
-	  if (nowSelectMode ) {
+	  if (nowSelectMode) {
 	    # Get address
-	    address <<- revgeocode(c(clng,clat))
+	    address <<- revgeocode(c(LmapLng,LmapLat))
 	    print(address)
 	    # use the proxy to save computation
 	    leafletProxy('Lmap') %>% 
-	      addCircles(lng=clng, lat=clat, group='circles',
+	      addCircles(lng=LmapLng, lat=LmapLat, group='circles',
 	                 weight=1, radius=100, color='black', fillColor='orange',
 	                 popup=address, fillOpacity=0.5, opacity=1,
 	                 layerId = 'target')
@@ -50,7 +50,7 @@ server = function(input, output, session) {
 	
 	# Draw polygon of transit
   observeEvent(input$generateTransitPolygon,{
-    urlWalkScore = urlWalkScore(apiKeyWalkScore, clat, clng, input$chooseTransitMethod, input$sliderTransitTime)
+    urlWalkScore = urlWalkScore(apiKeyWalkScore, LmapLat, LmapLng, input$chooseTransitMethod, input$sliderTransitTime)
     #print(urlWalkScore)
     goodString = parseJsonToString(urlWalkScore)
     #print(class(getJsonWalkScore))
@@ -62,51 +62,80 @@ server = function(input, output, session) {
         addProviderTiles("Stamen.Watercolor") %>%
         #addLegend(position = "bottomleft", pal = groupColors, values = room, opacity = 1, title = "Room Type") %>% 
         setView(lng = -73.9772, lat = 40.7527, zoom = 12) %>% 
-        addCircles(lng=clng, lat=clat, group='circles',
+        addCircles(lng=LmapLng, lat=LmapLat, group='circles',
                    weight=1, radius=100, color='black', fillColor='orange',
                    popup=address, fillOpacity=0.5, opacity=1,
                    layerId = 'target') %>% 
         addPolygons(stroke = TRUE, smoothFactor = 0.5, fillOpacity = 0.8)
     })
   })
+  
+  # Module test
+  callModule(module = dropPin, id = "test1", mapName = "Lap" )
 
 
 ###### Explore Map Page ######
   
   # Initialize Emap
+  # Get color based on neighborhood group.
+  nyc_code = geojsonio::geojson_read("./data/neighbourhoods.geojson",
+                                     what = "sp")
+  pal = colorFactor("RdYlBu", nyv_code@data[["neighbourhood_group"]])
+  
   output$Emap = renderLeaflet({
-    leaflet() %>% 
-      addProviderTiles("Stamen.Watercolor") %>%
+    leaflet(nyc_code) %>% 
+      addProviderTiles("Stamen.Watercolor", group = "Toner") %>%
       #addLegend(position = "bottomleft", pal = groupColors, values = room, opacity = 1, title = "Room Type") %>% 
-      setView(lng = -73.9772, lat = 40.7527, zoom = 12)
+      setView(lng = -73.9772, lat = 40.7527, zoom = 12) %>% 
+      addPolygons(stroke = TRUE, weight = 1, smoothFactor = 1, color = "#000000",
+                  
+                  label=~stringr::str_c(neighbourhood, ', ', neighbourhood_group),
+                  fillColor= ~pal(neighbourhood_group), fillOpacity = 1,
+                  group = "Boros",
+                  highlightOptions = highlightOptions(
+                    color='#ff0000', opacity = 0.3, weight = 2, fillOpacity = 0.3,
+                    bringToFront = TRUE, sendToBack = TRUE))
+  })
+  
+  # Enter explore mode. 
+  observeEvent(input$EMapSwitch, {
+    if (input$EMapSwitch) {
+      leafletProxy('Emap') %>% hideGroup("Boros")
+    } else {
+      leafletProxy('Emap') %>% showGroup("Boros")
+    }
   })
   
   # Get click information. 
   observeEvent(input$Emap_click, {
     # Read click info
-    #clat = 1
-    #clng = 2
     click = input$Emap_click
-    clat <<- click$lat
-    clng <<- click$lng
-    print(paste(clat,clng))
+    print('working')
+    EmapLat <<- click$lat
+    EmapLng <<- click$lng
+    print(paste(EmapLat,EmapLng))
     # Get mode signal
     nowSelectMode = input$EMapSwitch
     # Update
     if (nowSelectMode ) {
       # Get address
-      address <<- revgeocode(c(clng,clat))
+      address <<- revgeocode(c(EmapLng,EmapLat))
       print(address)
+      # Get WalkScore
+      url = urlWalkScoreCommon(apiKey = apiKeyWalkScore, lat = EmapLat, lon = EmapLng)
+      walkScore = getWalkScoreJson(url)
+      # GeneratePopUp
+      popup = paste(address, 'has WalkScore of', walkScore)
       # use the proxy to save computation
       leafletProxy('Emap') %>% 
-        addCircles(lng=clng, lat=clat, group='circles',
+        addCircles(lng=EmapLng, lat=EmapLat, group='circles',
                    weight=1, radius=100, color='black', fillColor='orange',
-                   popup=address, fillOpacity=0.5, opacity=1,
+                   popup=popup, fillOpacity=0.5, opacity=1,
                    layerId = 'target')
     } else {
       return()
     }
   })
-  # Set target marker
+  
   
 }

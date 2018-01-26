@@ -17,6 +17,12 @@ scatter <- function(input, output, session, datname, var1, var2, ptshape, col1, 
   dat <- eval(as.name(datname))
   dat <- dat[order(dat[[var1]]),]
   
+  
+  
+  observeEvent(input$test,{
+    print ('ttt')
+  })
+  
   resultdata <- reactive({
     dat[1:input$slider1,]
   })
@@ -38,6 +44,7 @@ scatter <- function(input, output, session, datname, var1, var2, ptshape, col1, 
 # App ui
 ui <- fluidPage(
   h3("The module creates two plots and a slider and is called twice below"),
+  sliderInput(inputId = 'test', label = 'haha',min = 0, max = 10, value = 5),
   scatterUI("prefix"),
   scatterUI("prefix2")
 )
