@@ -1,5 +1,6 @@
 setwd('~/Shiny/rogerPro/')
 source('helperWalkScore.R')
+source('helperYelpSearch.R')
 source('serverFunction.R')
 
 library(leaflet)
@@ -29,7 +30,5 @@ EmapLng = -73.99669
 
 apiKeyWalkScore = "8412c70d89cbac3d039721166ed78575"
 apiKeyGoogleMap = "AIzaSyAg9ptDoLp46EUcAG1ZpRGT6a-PjYMKOzs"
-#Yelp
-client_id = "vVeTqC9hHEHclhag6gHlLw"
-client_secret = "duaQ2KnrmguBZ7qXNVGzQT7n5tdpDBQiNhwVcuVj9SkvDpXik2bpp3Q64I5EPyTT"
+apiYelp = "M_z7AxjPGd3AXpUM6oBMni2eDekv7ILwtDGUpPXVrpvDhjGoAjTOUiHHg2Qk4sBFCuz6W9lwVYBDHV9UFgs-LVk7tbV0C45mYSu6VVXZ-N_bGWJTBNdFEMREHUdoWnYx"
 

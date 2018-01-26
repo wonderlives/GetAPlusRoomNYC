@@ -86,7 +86,6 @@ server = function(input, output, session) {
       #addLegend(position = "bottomleft", pal = groupColors, values = room, opacity = 1, title = "Room Type") %>% 
       setView(lng = -73.9772, lat = 40.7527, zoom = 12) %>% 
       addPolygons(stroke = TRUE, weight = 1, smoothFactor = 1, color = "#000000",
-                  
                   label=~stringr::str_c(neighbourhood, ', ', neighbourhood_group),
                   fillColor= ~pal(neighbourhood_group), fillOpacity = 1,
                   group = "Boros",
@@ -122,8 +121,15 @@ server = function(input, output, session) {
       # Get WalkScore
       url = urlWalkScoreCommon(apiKey = apiKeyWalkScore, lat = EmapLat, lon = EmapLng)
       walkScore = getWalkScoreJson(url)
+      # Get Yelp business count
+          # term
+          # limit
+          # radius
+      url = getUrlYelp("Food", lat = EmapLat, lon = EmapLng, limit = 50, radius = 500)
+      yelpResult = yelpResult(url, apiYelp)
+      businessCount = yelpResult$total
       # GeneratePopUp
-      popup = paste(address, 'has WalkScore of', walkScore)
+      popup = paste(address, 'has WalkScore of', walkScore, "and has food count of", businessCount)
       # use the proxy to save computation
       leafletProxy('Emap') %>% 
         addCircles(lng=EmapLng, lat=EmapLat, group='circles',
