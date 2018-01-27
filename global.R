@@ -1,3 +1,5 @@
+#shinyWidgets::shinyWidgetsGallery()
+
 setwd('~/Shiny/rogerPro/')
 source('helperWalkScore.R')
 source('helperYelpSearch.R')
@@ -14,6 +16,7 @@ library(shinyWidgets)
 library(ggmap)
 library(tidyverse)
 library(httr)
+library(emo)
 
 walkScoreLevel = c("Mars", "Car-Dependent", "Somewhat Walkable", "Very Walkable", "Walker's Paradise")
 safetyScoreLevel = c("Real Gangster","Moderate","Pretty Safe","Very Safe","Like a Bank")

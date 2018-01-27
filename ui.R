@@ -12,7 +12,7 @@
       # 5. About: Github + LinkedIn + Blog; Data Sources
 
 ##### Define website title and theme. #####
-ui = navbarPage(title = "NYC Living Recommendation System",
+ui = navbarPage(title = paste("NYC Living Recommendation System",emo::ji("poop")),
                 id    = "navPage",
                 theme = shinytheme("cerulean"),
 
