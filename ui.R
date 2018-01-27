@@ -31,7 +31,7 @@ ui = navbarPage(title = "NYC Living Recommendation System",
         ),
 
 ##### 2. MulFuncMap: AirBnb + WalkScore + NYCOpenData(Crime) + Yelp + RangePolygon(From WalkScore) #####
-      tabPanel(title = "MulFuncMap",
+      tabPanel( icon = icon("table"),title = "MulFuncMap",
         
         div(
           
@@ -138,7 +138,7 @@ ui = navbarPage(title = "NYC Living Recommendation System",
            tags$head(includeCSS("./www/styles.css")),
            
            # Add Explore Map       
-           leafletOutput(outputId = "Emap", width = "100%", height = "100%"),
+           leafletOutput(outputId = "Emap", width = "50%", height = "100%"),
            
            # Add Explore Control Panel
            absolutePanel(id = "controls", class = "panel panel-default", fixed = TRUE, draggable = TRUE, 
