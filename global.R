@@ -4,6 +4,7 @@ setwd('~/Shiny/rogerPro/')
 source('helperWalkScore.R')
 source('helperYelpSearch.R')
 source('serverFunction.R')
+#source('dataPreparation.R')
 
 library(leaflet)
 library(googleway)
@@ -17,6 +18,8 @@ library(ggmap)
 library(tidyverse)
 library(httr)
 library(emo)
+library(data.table)
+library(dplyr)
 
 walkScoreLevel = c("Mars", "Car-Dependent", "Somewhat Walkable", "Very Walkable", "Walker's Paradise")
 safetyScoreLevel = c("Real Gangster","Moderate","Pretty Safe","Very Safe","Like a Bank")
@@ -30,6 +33,8 @@ LmapLng = -73.99669
 
 EmapLat = 40.754539
 EmapLng = -73.99669
+
+address = "dd"
 
 apiKeyWalkScore = "8412c70d89cbac3d039721166ed78575"
 apiKeyGoogleMap = "AIzaSyAg9ptDoLp46EUcAG1ZpRGT6a-PjYMKOzs"

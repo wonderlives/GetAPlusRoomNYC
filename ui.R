@@ -138,7 +138,7 @@ ui = navbarPage(title = paste("NYC Living Recommendation System",emo::ji("poop")
            tags$head(includeCSS("./www/styles.css")),
            
            # Add Explore Map       
-           leafletOutput(outputId = "Emap", width = "50%", height = "100%"),
+           leafletOutput(outputId = "Emap", width = "100%", height = "100%"),
            
            # Add Explore Control Panel
            absolutePanel(id = "controls", class = "panel panel-default", fixed = TRUE, draggable = TRUE, 

@@ -135,7 +135,16 @@ server = function(input, output, session) {
         addCircles(lng=EmapLng, lat=EmapLat, group='circles',
                    weight=1, radius=100, color='black', fillColor='orange',
                    popup=popup, fillOpacity=0.5, opacity=1,
-                   layerId = 'target')
+                   layerId = 'target') 
+      ######## Crime data add-on test, FAILED, too many points ######
+      #%>% 
+      #  addCircleMarkers(
+      #    lat = crimeDT$Latitude,
+      #    lng = crimeDT$Longitude,
+      #    radius = 1,
+      #    #color = ~pal(type),
+      #    stroke = FALSE, fillOpacity = 0.5)
+      ######## End of the test! ##########
     } else {
       return()
     }
