@@ -37,6 +37,10 @@ EmapLng = -73.99669
 address = "dd"
 
 apiKeyWalkScore = "8412c70d89cbac3d039721166ed78575"
+# above gmail
+# rochester walk backup 851d97883c01a58520a845f201b3c328
+# mcgill walk backup d524cd1f8d2cd5ec99b2379ce7463301
+# sherry mcgill walk backup d524cd1f8d2cd5ec99b2379ce7463301
 apiKeyGoogleMap = "AIzaSyAg9ptDoLp46EUcAG1ZpRGT6a-PjYMKOzs"
 apiYelp = "M_z7AxjPGd3AXpUM6oBMni2eDekv7ILwtDGUpPXVrpvDhjGoAjTOUiHHg2Qk4sBFCuz6W9lwVYBDHV9UFgs-LVk7tbV0C45mYSu6VVXZ-N_bGWJTBNdFEMREHUdoWnYx"
 
