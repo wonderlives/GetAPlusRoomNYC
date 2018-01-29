@@ -75,6 +75,10 @@ ui = navbarPage(title = paste("NYC Living Recommendation System",emo::ji("poop")
                       min = 1, max = 300, step = 20,
                       pre = "$", sep = ",", value = c(80, 200)),
           
+          ######## Let's try graph. 
+          plotOutput("testplot1", height = 400),
+          
+          
             # Plot Tempearture for the selected dates
           ####plotOutput("tempAvg", height = 400),
           htmlOutput("tempAvg", height = 400),

@@ -22,20 +22,23 @@ airbnbVis$crimeDone = rep(-1,nrow(airbnbVis))
 # Reload instead
 
 # LOAD
-load("./data/airbnbVis_28.Rda")
-
+load("./data/airbnbVis_29930.Rda")
+load("finalWeather.Rda")
 
 # Jan 28 
 
-apiKeyWalkScore = "8412c70d89cbac3d039721166ed78575"
+apiKeyWalkScore = "a168759358c4ce208525bd3f93add3ba"
+apiYelp = "IheKUwPOJ4ZcTTPMokNsIIdGttM2fzskq8hLqyzzNbRsxyOwCOhjULFJrDrfVsjX_tqkz6Ba1sjwIDxnz4Mdp2HyAtPFr9X9cQUoXMkevnVI2Fv-1EQVF1SBf4BvWnYx"
+# rr 851d97883c01a58520a845f201b3c328
 # gmail 8412c70d89cbac3d039721166ed78575
 # rochester walk backup 851d97883c01a58520a845f201b3c328
 # mcgill walk backup d524cd1f8d2cd5ec99b2379ce7463301
 # sherry mcgill walk backup d524cd1f8d2cd5ec99b2379ce7463301
+# andrew cornell 
 
 ####Now end at 6854
-i = 6855
-while (i < 25001) {
+#i =29931
+while (i < 34844) {
   
   # Get lat and lon
   lat = airbnbVis[i, latitude]
@@ -45,8 +48,8 @@ while (i < 25001) {
   
   # Yelp
   if (airbnbVis[i, yelpDone] == -1) {
-    url = getUrlYelp('Food',lat, lon, 10, 250)
-    foodResult = yelpResult(url, apiYelp)
+    url1 = getUrlYelp('Food',lat, lon, 10, 250)
+    foodResult = yelpResult(url1, apiYelp)
     airbnbVis[i, Food:=foodResult$total] 
     airbnbVis[i, yelpDone := 1] 
   }
@@ -79,5 +82,5 @@ while (i < 25001) {
   
 }
 
-save(airbnbVis,file="./data/airbnbVis_28.Rda")
+save(airbnbVis,file="./data/airbnbVis_yelp_ws_done.Rda")
 

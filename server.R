@@ -19,7 +19,7 @@ load("finalWeather.Rda")
 	  end = input$selectMonth[2]
 	  start = match(start,month.abb)
 	  end = match(end, month.abb)
-	  df = weatherRawData[(start-1)*30+1:end*30, ]
+	  df = weatherRawData[(start-1)*30+1:(end-1)*30, ]
 	  print(start)
 	  return (df)
 	})
