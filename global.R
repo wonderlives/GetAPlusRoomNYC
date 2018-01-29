@@ -6,6 +6,8 @@ source('helperYelpSearch.R')
 source('serverFunction.R')
 #source('dataPreparation.R')
 
+load("finalWeather.Rda")
+
 library(leaflet)
 library(googleway)
 library(RCurl)
@@ -20,6 +22,8 @@ library(httr)
 library(emo)
 library(data.table)
 library(dplyr)
+library(geosphere)
+library(data.table)
 
 walkScoreLevel = c("Mars", "Car-Dependent", "Somewhat Walkable", "Very Walkable", "Walker's Paradise")
 safetyScoreLevel = c("Real Gangster","Moderate","Pretty Safe","Very Safe","Like a Bank")
@@ -36,8 +40,8 @@ EmapLng = -73.99669
 
 address = "dd"
 
-apiKeyWalkScore = "8412c70d89cbac3d039721166ed78575"
-# above gmail
+apiKeyWalkScore = "d524cd1f8d2cd5ec99b2379ce7463301"
+# gmail 8412c70d89cbac3d039721166ed78575
 # rochester walk backup 851d97883c01a58520a845f201b3c328
 # mcgill walk backup d524cd1f8d2cd5ec99b2379ce7463301
 # sherry mcgill walk backup d524cd1f8d2cd5ec99b2379ce7463301

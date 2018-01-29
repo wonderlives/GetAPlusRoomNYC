@@ -32,6 +32,9 @@ Gauge <-  gvisGauge(DT2,
                                  redFrom=0, redTo=30, width=400, height=300))
 plot(Gauge)
 
+# Weather plot
+
+
 
 # Remove JS footer
 #M <- gvisColumnChart(data, xvar = "", yvar = "", options = list(), chartid)

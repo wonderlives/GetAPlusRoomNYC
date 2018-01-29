@@ -1,9 +1,9 @@
 server = function(input, output, session) {
-  
+load("finalWeather.Rda")  
  
   
 ###### MultiFunc Map Page ######
-  
+
   # Initialize Lmap
 	output$Lmap = renderLeaflet({
 		leaflet() %>% 
@@ -14,14 +14,51 @@ server = function(input, output, session) {
 	
 	
 	# Add the temperature graph.
-	output$tempAvg = renderPlot({
+	starEndMonth = reactive({
+	  start = input$selectMonth[1]
+	  end = input$selectMonth[2]
+	  start = match(start,month.abb)
+	  end = match(end, month.abb)
+	  df = weatherRawData[(start-1)*30+1:end*30, ]
+	  print(start)
+	  return (df)
+	})
+	output$testEvent = renderPrint({
+	  df = starEndMonth()
+	  print ('working')
+	  print (class(df))
+	})
+	output$tempAvg = renderGvis({
+	  gvisLineChart(starEndMonth(), xvar = 'dateS', 
+	                yvar = c("averageLow", "averageHigh", "recordHigh", "recordLow"),
+	                options = list(
+	                  width=300, height= 400,
+	                  legend = {"position: 'bottom'"},
+	                  #titleTextStyle="{color:'red', fontName:'Courier', fontSize:16}",
+	                  #colors="['#cbb69d', '#603913', '#c69c6e']",
+	                  hAxis='{title: "Date"}',
+	                  hAxis="{format: 'MMM d, y'}",
+	                  #vAxis="{title:'Temperatures (F)'}",
+	                  vAxes="[{title:'Temperatures (F)',
+	                  format:'####',
+	                  titleTextStyle: {color: 'black'},
+	                  textStyle:{color: 'blue'},
+	                  textPosition: 'out'}]"
+	                  #vAxis="{title:'Temperature (F)'}",
+	                  
+	                  #vAxis="{viewWindow.max: '100'}",
+	                  
+	                  #vAxis="{minValue: '-20'}"
+	                )
+	  )
+	  
 	  ## add in later
 	})
   
 	# Add the rainfall stats graph.
-	output$rainFall = renderPlot({
+	#output$rainFall = renderPlot({
 	  ## add in later
-	})
+	#})
 	
 	# Set target marker
 	observeEvent(input$Lmap_click, {

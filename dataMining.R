@@ -3,6 +3,8 @@ source('helperWalkScore.R')
 source('helperYelpSearch.R')
 source('global.R')
 
+# Bug test
+#airbnbVis[11903:11907, .(Food,yelpDone, walkScore, walkDone)]
 
 # Initialize file !!!!!CAREFUL!!!!DO NOT REST!!!!!!!!
 airbnbVis = fread('./dataset/airbnb_vis.csv')
@@ -14,16 +16,26 @@ airbnbVis$bikeScore = rep(-1,nrow(airbnbVis))
 airbnbVis$transitScore = rep(-1,nrow(airbnbVis))
 airbnbVis$yelpDone = rep(-1,nrow(airbnbVis))
 airbnbVis$walkDone = rep(-1,nrow(airbnbVis))
+airbnbVis$crimeCount = rep(-1,nrow(airbnbVis))
+airbnbVis$crimeDone = rep(-1,nrow(airbnbVis))
 # !!!!!CAREFUL!!!!DO NOT REST!!!!!!!!
 # Reload instead
 
 # LOAD
-load("./data/airbnbVis.Rda")
+load("./data/airbnbVis_28.Rda")
 
 
 # Jan 28 
-i = 1
-while (i < 1000) {
+
+apiKeyWalkScore = "8412c70d89cbac3d039721166ed78575"
+# gmail 8412c70d89cbac3d039721166ed78575
+# rochester walk backup 851d97883c01a58520a845f201b3c328
+# mcgill walk backup d524cd1f8d2cd5ec99b2379ce7463301
+# sherry mcgill walk backup d524cd1f8d2cd5ec99b2379ce7463301
+
+####Now end at 6854
+i = 6855
+while (i < 25001) {
   
   # Get lat and lon
   lat = airbnbVis[i, latitude]
