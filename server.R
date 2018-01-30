@@ -28,6 +28,7 @@ load("finalWeather.Rda")
 	  print ('working')
 	  print (class(df))
 	})
+	
 	output$tempAvg = renderGvis({
 	  gvisLineChart(starEndMonth(), xvar = 'dateS', 
 	                yvar = c("averageLow", "averageHigh", "recordHigh", "recordLow"),
@@ -54,6 +55,14 @@ load("finalWeather.Rda")
 	  
 	  ## add in later
 	})
+	
+	output$testplot1 = renderPlot({
+	  hereDF = starEndMonth()
+	  x = hereDF$dateS
+	  y = hereDF$averageLow
+	  plot(x,y,'l')
+	}
+	)
   
 	# Add the rainfall stats graph.
 	#output$rainFall = renderPlot({

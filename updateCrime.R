@@ -36,5 +36,6 @@ while (j < 34843) {
   
   print(paste(j,'th','working has',result, 'crimes around'))
   j = j + 1
-  
 }
+
+save(airbnbVis,file="./data/airbnbVis_crime_DONE.Rda")

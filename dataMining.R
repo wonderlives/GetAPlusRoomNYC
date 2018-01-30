@@ -1,4 +1,6 @@
 # Source Yelp and WalkScore
+setwd('~/Shiny/rogerPro/')
+
 source('helperWalkScore.R')
 source('helperYelpSearch.R')
 source('global.R')
@@ -7,25 +9,25 @@ source('global.R')
 #airbnbVis[11903:11907, .(Food,yelpDone, walkScore, walkDone)]
 
 # Initialize file !!!!!CAREFUL!!!!DO NOT REST!!!!!!!!
-airbnbVis = fread('./dataset/airbnb_vis.csv')
-airbnbVis = airbnbVis[complete.cases(airbnbVis)]
+#airbnbVis = fread('./dataset/airbnb_vis.csv')
+#airbnbVis = airbnbVis[complete.cases(airbnbVis)]
 #
-airbnbVis$Food = rep(-1,nrow(airbnbVis))
-airbnbVis$walkScore = rep(-1,nrow(airbnbVis))
-airbnbVis$bikeScore = rep(-1,nrow(airbnbVis))
-airbnbVis$transitScore = rep(-1,nrow(airbnbVis))
-airbnbVis$yelpDone = rep(-1,nrow(airbnbVis))
-airbnbVis$walkDone = rep(-1,nrow(airbnbVis))
-airbnbVis$crimeCount = rep(-1,nrow(airbnbVis))
-airbnbVis$crimeDone = rep(-1,nrow(airbnbVis))
+#airbnbVis$Food = rep(-1,nrow(airbnbVis))
+#airbnbVis$walkScore = rep(-1,nrow(airbnbVis))
+#airbnbVis$bikeScore = rep(-1,nrow(airbnbVis))
+#airbnbVis$transitScore = rep(-1,nrow(airbnbVis))
+#airbnbVis$yelpDone = rep(-1,nrow(airbnbVis))
+#airbnbVis$walkDone = rep(-1,nrow(airbnbVis))
+#airbnbVis$crimeCount = rep(-1,nrow(airbnbVis))
+#airbnbVis$crimeDone = rep(-1,nrow(airbnbVis))
 # !!!!!CAREFUL!!!!DO NOT REST!!!!!!!!
 # Reload instead
 
 # LOAD
-load("./data/airbnbVis_29930.Rda")
-load("finalWeather.Rda")
 
-# Jan 28 
+load("./data/airbnbVis_30893.Rda")
+
+# Jan 29 
 
 apiKeyWalkScore = "a168759358c4ce208525bd3f93add3ba"
 apiYelp = "IheKUwPOJ4ZcTTPMokNsIIdGttM2fzskq8hLqyzzNbRsxyOwCOhjULFJrDrfVsjX_tqkz6Ba1sjwIDxnz4Mdp2HyAtPFr9X9cQUoXMkevnVI2Fv-1EQVF1SBf4BvWnYx"
@@ -37,7 +39,7 @@ apiYelp = "IheKUwPOJ4ZcTTPMokNsIIdGttM2fzskq8hLqyzzNbRsxyOwCOhjULFJrDrfVsjX_tqkz
 # andrew cornell 
 
 ####Now end at 6854
-#i =29931
+i =30893
 while (i < 34844) {
   
   # Get lat and lon
