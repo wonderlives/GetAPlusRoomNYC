@@ -26,6 +26,34 @@ p = plot_ly(weatherRawData, x = ~dateR, y = ~c("averageLow", "averageHigh", "rec
 
 ggplot(weatherRawData, aes(x=dateR,y=averageLow) + geom_point())
 plot()
+
+#######################################################################
+x = weatherRawData$dateR
+y1 = weatherRawData$averageLow
+y2 = weatherRawData$averageHigh
+y3 = weatherRawData$recordLow
+y4 = weatherRawData$recordHigh
+
+plot(x, y1, 'l', ylim = (c(0,110)), axes = FALSE, 
+     xlab = "" , ylab = "",  col = 'cornflowerblue', xaxt = "n")
+par(new = TRUE)
+plot(x, y2, 'l', ylim = (c(0,110)), axes = FALSE, xlab = "" , ylab = "", col = 'indianred1')
+par(new = TRUE)
+plot(x, y3, 'l', ylim = (c(0,110)), axes = FALSE, xlab = "" , ylab = "", col = 'blue4')
+par(new = TRUE)
+plot(x, y4, 'l', ylim = (c(0,110)), axes = TRUE, 
+     xlab = "Date", ylab = "Temperature(F)", col = 'firebrick3',
+     xaxt = "n")
+#axis.Date(side = 1, dates, format = "%d/%m/%Y", las = 2)
+axis.Date(side = 1, x, at = labDates, format = "%b %y", las = 2)
+op <- par(mar = c(7,4,4,2) + 0.1)
+par(op)
+########################################################################
+
+# second plot  EDIT: needs to have same ylim
+par(new = TRUE)
+plot(x, y2, ylim=range(c(y1,y2)), axes = FALSE, xlab = "", ylab = "")
+
 # Load library
 library(googleVis)
 graph = gvisLineChart(weatherRawData, xvar = 'dateS', 

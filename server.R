@@ -58,9 +58,20 @@ load("finalWeather.Rda")
 	
 	output$testplot1 = renderPlot({
 	  hereDF = starEndMonth()
-	  x = hereDF$dateS
-	  y = hereDF$averageLow
-	  plot(x,y,'l')
+	  x = hereDF$dateR
+	  y1 = hereDF$averageLow
+	  y2 = hereDF$averageHigh
+	  y3 = hereDF$recordLow
+	  y4 = hereDF$recordHigh
+	  plot(x, y1, 'l', ylim = range((c(y3,y4))), axes = FALSE, 
+	       xlab = "" , ylab = "",  col = 'cornflowerblue', xaxt = "n")
+	  par(new = TRUE)
+	  plot(x, y2, 'l', ylim = range((c(y3,y4))), axes = FALSE, xlab = "" , ylab = "", col = 'indianred1')
+	  par(new = TRUE)
+	  plot(x, y3, 'l', ylim = range((c(y3,y4))), axes = FALSE, xlab = "" , ylab = "", col = 'blue4')
+	  par(new = TRUE)
+	  plot(x, y4, 'l', ylim = range((c(y3,y4))), axes = TRUE, 
+	       xlab = "Date", ylab = "Temperature(F)", col = 'firebrick3')
 	}
 	)
   

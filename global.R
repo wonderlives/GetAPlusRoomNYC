@@ -24,6 +24,7 @@ library(data.table)
 library(dplyr)
 library(geosphere)
 library(data.table)
+library(googleVis)
 
 walkScoreLevel = c("Mars", "Car-Dependent", "Somewhat Walkable", "Very Walkable", "Walker's Paradise")
 safetyScoreLevel = c("Real Gangster","Moderate","Pretty Safe","Very Safe","Like a Bank")

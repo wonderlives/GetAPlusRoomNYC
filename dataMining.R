@@ -29,7 +29,7 @@ load("./data/airbnbVis_30893.Rda")
 
 # Jan 29 
 
-apiKeyWalkScore = "a168759358c4ce208525bd3f93add3ba"
+apiKeyWalkScore = "c711cb8b9941e688080c11c3bd677d78"
 apiYelp = "IheKUwPOJ4ZcTTPMokNsIIdGttM2fzskq8hLqyzzNbRsxyOwCOhjULFJrDrfVsjX_tqkz6Ba1sjwIDxnz4Mdp2HyAtPFr9X9cQUoXMkevnVI2Fv-1EQVF1SBf4BvWnYx"
 # rr 851d97883c01a58520a845f201b3c328
 # gmail 8412c70d89cbac3d039721166ed78575
@@ -37,9 +37,10 @@ apiYelp = "IheKUwPOJ4ZcTTPMokNsIIdGttM2fzskq8hLqyzzNbRsxyOwCOhjULFJrDrfVsjX_tqkz
 # mcgill walk backup d524cd1f8d2cd5ec99b2379ce7463301
 # sherry mcgill walk backup d524cd1f8d2cd5ec99b2379ce7463301
 # andrew cornell 
+# whtababy c711cb8b9941e688080c11c3bd677d78
 
 ####Now end at 6854
-i =30893
+i =32003
 while (i < 34844) {
   
   # Get lat and lon
@@ -84,5 +85,5 @@ while (i < 34844) {
   
 }
 
-save(airbnbVis,file="./data/airbnbVis_yelp_ws_done.Rda")
+save(airbnbVis,file="./data/airbnbVis_FINALFINALDONE_29.Rda")
 
