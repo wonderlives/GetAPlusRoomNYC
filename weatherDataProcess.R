@@ -28,22 +28,23 @@ ggplot(weatherRawData, aes(x=dateR,y=averageLow) + geom_point())
 plot()
 
 #######################################################################
-x = weatherRawData$dateR
-y1 = weatherRawData$averageLow
-y2 = weatherRawData$averageHigh
-y3 = weatherRawData$recordLow
-y4 = weatherRawData$recordHigh
+load("finalWeather.Rda") 
+
+x = weatherRawData[1:330, dateR]
+y1 = weatherRawData[1:330, averageLow]
+y2 = weatherRawData[1:330, averageHigh]
+y3 = weatherRawData[1:330, recordLow]
+y4 = weatherRawData[1:330, recordHigh]
 
 plot(x, y1, 'l', ylim = (c(0,110)), axes = FALSE, 
-     xlab = "" , ylab = "",  col = 'cornflowerblue', xaxt = "n")
+     xlab = "" , ylab = "",  col = 'cornflowerblue')
 par(new = TRUE)
 plot(x, y2, 'l', ylim = (c(0,110)), axes = FALSE, xlab = "" , ylab = "", col = 'indianred1')
 par(new = TRUE)
 plot(x, y3, 'l', ylim = (c(0,110)), axes = FALSE, xlab = "" , ylab = "", col = 'blue4')
 par(new = TRUE)
 plot(x, y4, 'l', ylim = (c(0,110)), axes = TRUE, 
-     xlab = "Date", ylab = "Temperature(F)", col = 'firebrick3',
-     xaxt = "n")
+     xlab = "Date", ylab = "Temperature(F)", col = 'firebrick3')
 #axis.Date(side = 1, dates, format = "%d/%m/%Y", las = 2)
 axis.Date(side = 1, x, at = labDates, format = "%b %y", las = 2)
 op <- par(mar = c(7,4,4,2) + 0.1)

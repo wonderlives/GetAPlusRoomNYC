@@ -1,7 +1,8 @@
 # Developer: Roger Ren (www.linkedin.com/in/xinyuren)
-# Version: 4.0 # Date: Jan 30, 2018
-# Version: 2.0 # Date: Jan 28, 2018
-# Version: 1.0 # Original Date: Jan 23 2018
+# Version: 2.0
+    # Date: Jan 30, 2018
+# Version: 1.0
+    # Original Date: Jan 23 2018
 # ##########################################
 
 # Define UI layout: navbarPage layout (5 tabs pages)
@@ -15,9 +16,11 @@
 ##### Define website title and theme. #####
 ui = navbarPage(title = paste("Get A+ Room NYC",emo::ji("poop")),
                 id    = "navPage",
-                theme = shinytheme("cerulean"),   
+                theme = shinytheme("cerulean"),
+
 ##### 1. Homepage: A gif bakcground with some quotes. #####
     tabPanel(title = "Homepage",
+             leafletOutput(outputId = "Tmap", width = "100%", height = "100%"),
                 br(),
                 br(),
                 h1("default"),
@@ -30,44 +33,36 @@ ui = navbarPage(title = paste("Get A+ Room NYC",emo::ji("poop")),
 
 ##### 2. MulFuncMap: AirBnb + WalkScore + NYCOpenData(Crime) + Yelp + RangePolygon(From WalkScore) #####
     
-    tabPanel(icon = icon("table"), title = "MulFuncMap",
-
+    tabPanel( icon = icon("table"),title = "MulFuncMap",
+    
     div(    
         # Set CSS for full screen map
         class="outer",
         tags$head(includeCSS("./www/styles.css")),
-        # Add LMap       
+        # Add Map       
         leafletOutput(outputId = "Lmap", width = "100%", height = "100%"),
         # Add Main Control Panel
         absolutePanel(id = "controls", class = "panel panel-default", fixed = TRUE, draggable = TRUE, 
                     top = 80, bottom = "auto", left = 20, right = "auto",
-                    width = 340, height = "auto",
+                    width =320, height = "auto",
             # Title of the panel
             h2("Place in NYC"),
-            # Address to GeoCode
-                div(style="display: inline-block;vertical-align:top; width: 250px;",
-                    textInput(inputId = "textInputAddress",
-                                         label = NULL,
-                                         placeholder = "NYC Data Science Academy...")),
-                div(style="display: inline-block;vertical-align:top; width: 10px;",
-                    actionButton("buttonSearchAddress", emo::ji("magnifying"))),
-
             # Time to stay
-            sliderTextInput(inputId = "sliderMonth", 
+            sliderTextInput(inputId = "selectMonth", 
                             label = "Please select when you will visit NYC:", 
-                            choices = month.abb, selected = month.abb[c(3,10)]),
+                            choices = month.abb, selected = month.abb[c(1,12)]),
             # Safety Level
-            sliderTextInput(inputId = "sliderSafety", 
+            sliderTextInput(inputId = "selectSafety", 
                             label = "Safety level:", 
                             choices = safetyScoreLevel,
                             selected = safetyScoreLevel[3]),
             # Food Level
-            sliderTextInput(inputId = "sliderFood", 
+            sliderTextInput(inputId = "selectFood", 
                             label = "Food level:", 
                             choices = foodScoreLevel,
                             selected = foodScoreLevel[3]),
             # Walk Level
-            sliderTextInput(inputId = "sliderWalk", 
+            sliderTextInput(inputId = "selectWalk", 
                             label = "Walk-friendly level:", 
                             choices = walkScoreLevel,
                             selected = walkScoreLevel[3]),
@@ -76,11 +71,10 @@ ui = navbarPage(title = paste("Get A+ Room NYC",emo::ji("poop")),
                         label = "Price", 
                         min = 1, max = 300, step = 20,
                         pre = "$", sep = ",", value = c(80, 200)),
-            # DEBUG TEXTBOX
-            verbatimTextOutput("debugText"),
             # Plot Tempearture for the selected dates
-            plotOutput("graphTemp", height = 400)
-            
+            plotOutput("tempAvg", height = 400),
+            # DEBUG TEXTBOX
+            verbatimTextOutput("testEvent")
             
             #### The following code was discarded due to lack of X-axis support and lack of viriance of rain data.
             # Plot Precipitation for the selected dates
@@ -89,19 +83,19 @@ ui = navbarPage(title = paste("Get A+ Room NYC",emo::ji("poop")),
             #   htmlOutput("tempAvg", height = 400), 
             #### END of the test codes.€
         ), # END of main control panel
-
+      
         # Add transit zone panel
         absolutePanel(id = "controls", class = "panel panel-default", fixed = TRUE, draggable = TRUE, 
                     top = "auto", bottom = 80, left = "auto", right = 20,
-                    width = "340", height = "auto",
-            # Add CSS
-                class="outer",
-                tags$head(includeCSS("./www/styles.css")),
+                    width =400, height = "auto",
             # Title of the panel
                 h2("How far can I get?"),
+            # Activate target select mode.
+                switchInput(inputId = "targetSelectModeSwitch", 
+                onStatus = "success", offStatus = "danger"),
             # Select transit method
-                prettyRadioButtons(inputId = "checkboxTransit", 
-                                label = "Choose method and time span:", 
+                prettyRadioButtons(inputId = "chooseTransitMethod", 
+                                label = "Choose:", 
                                 choices = transitMethods, 
                                 selected = transitMethods[4],
                                 icon = icon("check"),
@@ -110,19 +104,11 @@ ui = navbarPage(title = paste("Get A+ Room NYC",emo::ji("poop")),
                                 animation = "jelly"),
             # Select time
                 sliderInput(inputId = "sliderTransitTime", 
-                        label = NULL, width = "100%",
-                        min = 0, max = 60, step = 1,
-                        post = " min", value = 20),
-
-            # Travel map explore
-                fluidRow(
-                splitLayout(cellWidths = c("5","55%","20%", "20%"), 
-                            " ",
-                            switchInput(inputId = "switchLmapMarker", label ="Drop Pin",
-                                        onStatus = "success", offStatus = "danger"), 
-                            actionButton("buttonClearZone", "Clear"), 
-                            actionButton("buttonGenZone", "GO!"))
-                )
+                        label = "Time", 
+                        min = 0, max = 60, step = 5,
+                        post = "min", sep = ",", value = 20),
+            # Call api and draw polygon
+                actionButton("generateTransitPolygon", "Go!")
         ), # END of transit zone panel
       
         # Add style change panel
@@ -134,7 +120,7 @@ ui = navbarPage(title = paste("Get A+ Room NYC",emo::ji("poop")),
 
             # Choose between 3
             # @@##$$%% change later for different styles
-                prettyRadioButtons(inputId = "checkboxStyleLmap", 
+                prettyRadioButtons(inputId = "chooseMapStyle", 
                                 label = "Choose:", 
                                 choices = c("Click me !","Me !", "Or me !"), 
                                 icon = icon("check"), 
@@ -142,13 +128,12 @@ ui = navbarPage(title = paste("Get A+ Room NYC",emo::ji("poop")),
                                 bigger = TRUE, status = "info", 
                                 animation = "jelly")
         ) # END of style change panel
-
         ) # END of this div<>
     ), # END of the MultiFun Tab
 
 ##### 3. ExploreMap: Some visualization about the graph. #####     
     tabPanel(title = "ExploreMap",
-        div(
+    div(
         # Set CSS for full screen map
         class="outer",
         tags$head(includeCSS("./www/styles.css")),
@@ -164,7 +149,7 @@ ui = navbarPage(title = paste("Get A+ Room NYC",emo::ji("poop")),
             # Style chang
             # Choose between 3
             # @@##$$%% change later for different styles
-                prettyRadioButtons(inputId = "checkboxStyleEmap", 
+                prettyRadioButtons(inputId = "exploreMapControl", 
                                 label = "Choose:", 
                                 choices = c("Click me !","Me !", "Or me !"), 
                                 icon = icon("check"), 
@@ -173,42 +158,45 @@ ui = navbarPage(title = paste("Get A+ Room NYC",emo::ji("poop")),
                                 animation = "jelly"),
 
             # Select switch
-                switchInput(inputId = "switchEmapMarker", 
+                switchInput(inputId = "EMapSwitch", 
                     onStatus = "success", offStatus = "danger"),
             # Information Panel
                 # Address
                 fluidRow(
-                verbatimTextOutput("textAddress")
+                verbatimTextOutput("pricePrediction")
                 ),
+                # Walk + Bike + Transit
                 fluidRow(
-                htmlOutput("gaugeTransitScores")
+                htmlOutput("walkBikeTransitScore")
                 ),
+                # Business break down
                 fluidRow(
-                splitLayout(cellWidths = c("33%","33%", "33%"), htmlOutput("pieBreakPoint"), htmlOutput("pieBreakCity"), htmlOutput("pieBreakNYC"))
+                splitLayout(cellWidths = c("33%","33%", "33%"), htmlOutput("buzBreakPoint"), htmlOutput("buzBreakCity"), htmlOutput("buzBreakNYC"))
                 ),
+                # Price prediction
                 fluidRow(
-                verbatimTextOutput("textPricePrediction")
+                verbatimTextOutput("pricePrediction")
                 )
-
         ) # END of this panel
         ) # END of this div<>
     ), # END of the ExploreMap
 
 ##### 4. TransitMap: Plan transit extra powered by Google + Weather #####      
-    # Future Features.
-    # tabPanel(title = "TransitMap"),
+      tabPanel(title = "TransitMap"),
 
 ##### 5. About: Github + LinkedIn + Blog; Data Sources #####      
-    tabPanel(title = "About",
-           h1("90–100   Walker's Paradise
-                Daily errands do not require a car.
-                70–89   Very Walkable
-                Most errands can be accomplished on foot.
-                50–69   Somewhat Walkable
-                Some errands can be accomplished on foot.
-                25–49   Car-Dependent
-                Most errands require a car.
-                0–24    Car-Dependent
-                Almost all errands require a car.")
-           )
-)# END of NAVI page.##-RR
+      tabPanel(title = "About",
+               h1("90–100   Walker's Paradise
+                    Daily errands do not require a car.
+                    70–89   Very Walkable
+                    Most errands can be accomplished on foot.
+                    50–69   Somewhat Walkable
+                    Some errands can be accomplished on foot.
+                    25–49   Car-Dependent
+                    Most errands require a car.
+                    0–24    Car-Dependent
+                    Almost all errands require a car.")
+               )
+
+
+) # END of NAVI page.##-RR
