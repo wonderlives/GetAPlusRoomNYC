@@ -34,10 +34,15 @@ urlWalkScoreCommon = function(apiKey, lat, lon) {
   result = paste0(baseDomain,"&lat=",lat,"&lon=",lon,"&transit=1&bike=1&wsapikey=",apiKey)
   return (result)
 }
-# t = urlWalkScoreCommon(apiKeyWalkScore, 47.6085, -122.3295)
 
 # This function returns the JSON for COMMON WalkScore request.
 getWalkScoreJson = function(url) {
   result = fromJSON(url)
   return(result$walkscore)
+}
+
+getObjectWS = function(apiKey, lat, lon) {
+    url = urlWalkScoreCommon(apiKey, lat, lon)
+    result = fromJSON(url)
+    return (result)
 }

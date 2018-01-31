@@ -154,44 +154,69 @@ ui = navbarPage(title = paste("Get A+ Room NYC",emo::ji("poop")),
         tags$head(includeCSS("./www/styles.css")),
         # Add Explore Map       
         leafletOutput(outputId = "Emap", width = "50%", height = "100%"),
-        # Add Explore Control Panel
+        # Add Control Panel
+        absolutePanel(id = "controls", class = "panel panel-default", fixed = TRUE, draggable = FALSE, 
+                    top = "auto", bottom = 10, left = 0, right = "auto",
+                    width ="50%", height = "auto",
+            # Title of the panel
+            h6("Drop a pin and choose radius"),
+            # Travel map explore
+                fluidRow(
+                splitLayout(cellWidths = c("5","15%","70%", "3%", "7%"), 
+                            " ",
+                            switchInput(inputId = "switchEmapMarker", 
+                                        label = "Explore!",
+                                        onStatus = "success", offStatus = "danger"), 
+                            sliderInput(inputId = "sliderRadius", 
+                                        label = NULL, width = "100%",
+                                        min = 0, max = 1000, step = 50,
+                                        post = " m", value = 250), 
+                            "",
+                            actionButton("buttonEmapGenData", "GO!"))
+                )
+                
+        ), # END of the Control Panel
+
+        # Add Showing Panel
         absolutePanel(id = "controls", class = "panel panel-default", fixed = TRUE, draggable = FALSE, 
                     top = 55, bottom = "auto", left = "auto", right = 0,
                     width ="50%", height = "auto",
             # Title of the panel
-                h2("Choose a style"),
-
-            # Style chang
-            # Choose between 3
-            # @@##$$%% change later for different styles
-                prettyRadioButtons(inputId = "checkboxStyleEmap", 
-                                label = "Choose:", 
-                                choices = c("Click me !","Me !", "Or me !"), 
-                                icon = icon("check"), 
-                                inline = TRUE,
-                                bigger = TRUE, status = "info", 
-                                animation = "jelly"),
-
-            # Select switch
-                switchInput(inputId = "switchEmapMarker", 
-                    onStatus = "success", offStatus = "danger"),
+                div(style="text-align:center",
+                    h1("Your Pin Information")),
             # Information Panel
                 # Address
+                h3('Here is the Address:'),
+                div(style="text-align:center",
+                    textOutput("textEAddress")),
+                # Gauge
+                h3('The Walk, Bike, Transit Indices:'),
                 fluidRow(
-                verbatimTextOutput("textAddress")
+                splitLayout(cellWidths = c("33%","33%", "33%"), 
+                            htmlOutput("gaugeWalkScores"), 
+                            htmlOutput("gaugeBikeScores"), 
+                            htmlOutput("gaugeTransitScores"))
                 ),
+
+                # Business break down
+                h3('Here is the Business Breakdown:'),
                 fluidRow(
-                htmlOutput("gaugeTransitScores")
+                splitLayout(cellWidths = c("33%","33%", "33%"), 
+                            htmlOutput("pieBreakPoint"),
+                            htmlOutput("pieBreakCity"), 
+                            htmlOutput("pieBreakNYC"))
                 ),
+                # Price Prediction
+                h3('The Predicted Price is:'),
                 fluidRow(
-                splitLayout(cellWidths = c("33%","33%", "33%"), htmlOutput("pieBreakPoint"), htmlOutput("pieBreakCity"), htmlOutput("pieBreakNYC"))
-                ),
-                fluidRow(
-                verbatimTextOutput("textPricePrediction")
+                div(style="text-align:center",
+                    textOutput("textPricePrediction"))
                 )
 
-        ) # END of this panel
+        ) # END of Showing panel
+
         ) # END of this div<>
+
     ), # END of the ExploreMap
 
 ##### 4. TransitMap: Plan transit extra powered by Google + Weather #####      
