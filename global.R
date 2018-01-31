@@ -14,6 +14,7 @@ library(geojsonio) 		# geojson_read: plot polygon
 library(jsonlite)		# readJSON in gauge
 library(data.table)		# Main data framework
 library(httr)			# Yelp helper
+library(leaflet.extras) # cool effects
 
 # Source help functions
 source('helperWalkScore.R')

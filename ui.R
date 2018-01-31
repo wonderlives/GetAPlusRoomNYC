@@ -13,24 +13,49 @@
     # 5. About: Github + LinkedIn + Blog; Data Sources
 
 ##### Define website title and theme. #####
-ui = navbarPage(title = paste("Get A+ Room NYC",emo::ji("poop")),
+ui = navbarPage(
+                title = paste("Get A+ Room NYC",emo::ji("poop")),
                 id    = "navPage",
                 theme = shinytheme("cerulean"),   
 ##### 1. Homepage: A gif bakcground with some quotes. #####
-    tabPanel(title = "Homepage",
-                br(),
-                br(),
-                h1("default"),
-                h1("placeholder", placeholder = TRUE),
-                HTML('<center><img src="darkNYC.jpg", height = 1920, weight = 1080 ></center>'),
-                helpText("Note: while the data view will show only",
-                        "the specified number of observations, the",
-                        "summary will be based on the full dataset.")
+    tabPanel(icon = icon("home"), title = "Home",
+
+        div(    
+        # Set CSS for full screen map
+        class="outer",
+        tags$head(includeCSS("./www/styles.css")),
+        tags$head(
+                tags$style(HTML("
+                @import url('//fonts.googleapis.com/css?family=Lobster|Cabin:400,700');
+
+                h1 {
+                font-family: 'Lobster', cursive;
+                font-weight: 600;
+                line-height: 1.1;
+                color: #FF5733;
+                }
+
+                "))
+                ),
+        
+        HTML('<center><img src="city3.jpg", height = 1080 , weight = 1920 ></center>'),
+
+
+        absolutePanel(id = "tests", class = "panel panel-default", 
+                    fixed = TRUE, draggable = FALSE, 
+                    top = 150, bottom = "auto", left = 100, right = 100,
+                    width = 650, height = "auto",
+                    h1("Random Quote:"),
+                    br(),
+                    h1("The state bird of New York is the Jaywalk."))
+
+        )
+
 ),
 
 ##### 2. MulFuncMap: AirBnb + WalkScore + NYCOpenData(Crime) + Yelp + RangePolygon(From WalkScore) #####
     
-    tabPanel(icon = icon("table"), title = "MulFuncMap",
+    tabPanel(icon = icon("map-marker"), title = "Select",
 
     div(    
         # Set CSS for full screen map
@@ -77,7 +102,7 @@ ui = navbarPage(title = paste("Get A+ Room NYC",emo::ji("poop")),
                         min = 1, max = 300, step = 20,
                         pre = "$", sep = ",", value = c(80, 200)),
             # DEBUG TEXTBOX
-            verbatimTextOutput("debugText"),
+            # verbatimTextOutput("debugText"),
             # Plot Tempearture for the selected dates
             plotOutput("graphTemp", height = 400)
             
@@ -123,31 +148,31 @@ ui = navbarPage(title = paste("Get A+ Room NYC",emo::ji("poop")),
                             actionButton("buttonClearZone", "Clear"), 
                             actionButton("buttonGenZone", "GO!"))
                 )
-        ), # END of transit zone panel
+        ) # END of transit zone panel
       
         # Add style change panel
-        absolutePanel(id = "controls", class = "panel panel-default", fixed = TRUE, draggable = TRUE, 
-                    top = 80, bottom = "auto", left = "auto", right = 20,
-                    width =400, height = "auto",
-            # Title of the panel
-                h2("Choose a style"),
+        # absolutePanel(id = "controls", class = "panel panel-default", fixed = TRUE, draggable = TRUE, 
+        #             top = 80, bottom = "auto", left = "auto", right = 20,
+        #             width =400, height = "auto",
+        #     # Title of the panel
+        #         h2("Choose a style"),
 
-            # Choose between 3
-            # @@##$$%% change later for different styles
-                prettyRadioButtons(inputId = "checkboxStyleLmap", 
-                                label = "Choose:", 
-                                choices = c("Click me !","Me !", "Or me !"), 
-                                icon = icon("check"), 
-                                inline = TRUE,
-                                bigger = TRUE, status = "info", 
-                                animation = "jelly")
-        ) # END of style change panel
+        #     # Choose between 3
+        #     # @@##$$%% change later for different styles
+        #         prettyRadioButtons(inputId = "checkboxStyleLmap", 
+        #                         label = "Choose:", 
+        #                         choices = c("Click me !","Me !", "Or me !"), 
+        #                         icon = icon("check"), 
+        #                         inline = TRUE,
+        #                         bigger = TRUE, status = "info", 
+        #                         animation = "jelly")
+        #) # END of style change panel
 
         ) # END of this div<>
     ), # END of the MultiFun Tab
 
 ##### 3. ExploreMap: Some visualization about the graph. #####     
-    tabPanel(title = "ExploreMap",
+    tabPanel(icon = icon("map"), title = "Explore",
         div(
         # Set CSS for full screen map
         class="outer",
@@ -179,16 +204,29 @@ ui = navbarPage(title = paste("Get A+ Room NYC",emo::ji("poop")),
 
         # Add Showing Panel
         absolutePanel(id = "controls", class = "panel panel-default", fixed = TRUE, draggable = FALSE, 
-                    top = 55, bottom = "auto", left = "auto", right = 0,
+                    top = 55, bottom = 0, left = "auto", right = 0,
                     width ="50%", height = "auto",
             # Title of the panel
                 div(style="text-align:center",
                     h1("Your Pin Information")),
+
+                br(),
+                br(),
+
             # Information Panel
                 # Address
                 h3('Here is the Address:'),
                 div(style="text-align:center",
-                    textOutput("textEAddress")),
+                    textOutput("textEAddress"),
+                    tags$head(tags$style("#textEAddress{color: black;
+                                 font-size: 20px;
+                                 font-style: italic;
+                                 }"
+                         )
+              )),
+
+                br(),
+
                 # Gauge
                 h3('The Walk, Bike, Transit Indices:'),
                 fluidRow(
@@ -197,7 +235,7 @@ ui = navbarPage(title = paste("Get A+ Room NYC",emo::ji("poop")),
                             htmlOutput("gaugeBikeScores"), 
                             htmlOutput("gaugeTransitScores"))
                 ),
-
+                br(),
                 # Business break down
                 h3('Here is the Business Breakdown:'),
                 fluidRow(
@@ -206,11 +244,19 @@ ui = navbarPage(title = paste("Get A+ Room NYC",emo::ji("poop")),
                             htmlOutput("pieBreakCity"), 
                             htmlOutput("pieBreakNYC"))
                 ),
+                br(),
                 # Price Prediction
                 h3('The Predicted Price is:'),
                 fluidRow(
                 div(style="text-align:center",
-                    textOutput("textPricePrediction"))
+                    textOutput("textPricePrediction"),
+                    tags$head(tags$style("#textPricePrediction{color: red;
+                                 font-size: 20px;
+                                 font-style: italic;
+                                 }"
+                         )
+                    )
+                )
                 )
 
         ) # END of Showing panel
@@ -224,16 +270,7 @@ ui = navbarPage(title = paste("Get A+ Room NYC",emo::ji("poop")),
     # tabPanel(title = "TransitMap"),
 
 ##### 5. About: Github + LinkedIn + Blog; Data Sources #####      
-    tabPanel(title = "About",
-           h1("90–100   Walker's Paradise
-                Daily errands do not require a car.
-                70–89   Very Walkable
-                Most errands can be accomplished on foot.
-                50–69   Somewhat Walkable
-                Some errands can be accomplished on foot.
-                25–49   Car-Dependent
-                Most errands require a car.
-                0–24    Car-Dependent
-                Almost all errands require a car.")
+    tabPanel(icon = icon("bullhorn"),title = "About",
+           h1('Under Construction')
            )
 )# END of NAVI page.##-RR

@@ -7,10 +7,10 @@ server = function(input, output, session) {
 ###################################################### MultiFunc Map Page ######################################################
 
 # DEBUG TEXT BOX 
-    output$debugText = renderPrint({
-        print(paste(LmapLat,LmapLng))
-        print(input$textInputAddress)
-    })
+    # output$debugText = renderPrint({
+    #     print(paste(LmapLat,LmapLng))
+    #     print(input$textInputAddress)
+    # })
 
 # Initialize Lmap
     output$Lmap = renderLeaflet({
@@ -35,6 +35,14 @@ server = function(input, output, session) {
             LmapLat <<- geocode(address())$lat
             LmapLng <<- geocode(address())$lon
             print(paste(LmapLat,LmapLng))
+            leafletProxy("Lmap") %>% 
+                addPulseMarkers(
+                    lng= LmapLng, lat=LmapLat,
+                    label= address(),
+                    icon = makePulseIcon(heartbeat = 1))%>%
+                setView (
+                    lng = LmapLng, lat = LmapLat, zoom = 15
+                    )
         } else {
             print('Empty address')
             return()
@@ -124,7 +132,10 @@ server = function(input, output, session) {
             leaflet(transitPolygon) %>% 
             addProviderTiles("Stamen.Watercolor") %>%
             #addLegend(position = "bottomleft", pal = groupColors, values = room, opacity = 1, title = "Room Type") %>% 
-            setView(lng = zoneLon, lat = zoneLat, zoom = 12) %>% 
+            setView(lng = zoneLon, lat = zoneLat, zoom = 12) %>%
+            addPulseMarkers(
+                    lng= LmapLng, lat=LmapLat,
+                    icon = makePulseIcon(heartbeat = 1))%>%
             addCircles(lng = zoneLon, lat = zoneLat, group='circles',
             weight=1, radius=100, color='black', fillColor='orange',
             popup=address, fillOpacity=0.5, opacity=1,
@@ -168,6 +179,20 @@ server = function(input, output, session) {
         }
     })
 
+# Draw circle when move radius 
+    observeEvent(input$sliderRadius, {
+        leafletProxy("Emap") %>% 
+            addPulseMarkers(
+                    lng= EmapLng, lat=EmapLat,
+                    label= Eaddress,
+                    icon = makePulseIcon(heartbeat = 1))%>%
+            setView (
+                    lng = EmapLng, lat = EmapLat, zoom = 15
+                    )%>% 
+            addCircles(lng = EmapLng, lat = EmapLat, weight = 1,
+                        radius = input$sliderRadius, layerId = "Radius")
+    })
+
 # Drop pin and get coords
     observeEvent(input$Emap_click, {
         # Read click info
@@ -187,10 +212,12 @@ server = function(input, output, session) {
                         output$textEAddress = renderText({ Eaddress })
                     # use the proxy to save computation
                         leafletProxy("Emap") %>% 
-                        addCircles(lng=EmapLng, lat=EmapLat, group='circles',
-                                    weight=1, radius=100, color='black', fillColor='orange',
-                                    popup=Eaddress, fillOpacity=0.5, opacity=1,
-                                    layerId = 'dropPin') 
+                        addPulseMarkers(
+                            lng= EmapLng, lat=EmapLat,
+                            label= Eaddress,
+                            icon = makePulseIcon(heartbeat = 1))%>% 
+                        addCircles(lng = EmapLng, lat = EmapLat, weight = 1,
+                                    radius = input$sliderRadius, layerId = "Radius")
                 } else {
                     return()
                 }
@@ -219,19 +246,19 @@ server = function(input, output, session) {
                                     gvisGauge(walkWS, 
                                     options=list(min=0, max=100, greenFrom=70,
                                     greenTo=100, yellowFrom=30, yellowTo=70,
-                                    redFrom=0, redTo=30, width=300, height=200))
+                                    redFrom=0, redTo=30, width=250, height=150))
             })
             output$gaugeBikeScores = renderGvis({
                                     gvisGauge(bikeWS, 
                                     options=list(min=0, max=100, greenFrom=70,
                                     greenTo=100, yellowFrom=30, yellowTo=70,
-                                    redFrom=0, redTo=30, width=300, height=200))
+                                    redFrom=0, redTo=30, width=250, height=150))
             })
             output$gaugeTransitScores = renderGvis({
                                     gvisGauge(transit, 
                                     options=list(min=0, max=100, greenFrom=70,
                                     greenTo=100, yellowFrom=30, yellowTo=70,
-                                    redFrom=0, redTo=30, width=300, height=200))
+                                    redFrom=0, redTo=30, width=250, height=150))
             })
 
         # Generate PieBreak Down
