@@ -51,7 +51,7 @@ ui = navbarPage(
 
         )
 
-),
+    ),
 
 ##### 2. MulFuncMap: AirBnb + WalkScore + NYCOpenData(Crime) + Yelp + RangePolygon(From WalkScore) #####
     
@@ -68,7 +68,7 @@ ui = navbarPage(
                     top = 80, bottom = "auto", left = 20, right = "auto",
                     width = 340, height = "auto",
             # Title of the panel
-            h2("Place in NYC"),
+            h4("Choose Your Target"),
             # Address to GeoCode
                 div(style="display: inline-block;vertical-align:top; width: 250px;",
                     textInput(inputId = "textInputAddress",
@@ -81,19 +81,27 @@ ui = navbarPage(
             sliderTextInput(inputId = "sliderMonth", 
                             label = "Please select when you will visit NYC:", 
                             choices = month.abb, selected = month.abb[c(3,10)]),
+            # Room Type
+            prettyCheckboxGroup(inputId = "checkboxRoomType", 
+                                  label = "Choose room type(s):", 
+                                  choices = roomType, 
+                                  selected = roomType,
+                                  icon = icon("check-square-o"), 
+                                  status = "primary", outline = TRUE, 
+                                  animation = "jelly"),
             # Safety Level
             sliderTextInput(inputId = "sliderSafety", 
-                            label = "Safety level:", 
+                            label = "Min Safety level:", 
                             choices = safetyScoreLevel,
                             selected = safetyScoreLevel[3]),
             # Food Level
             sliderTextInput(inputId = "sliderFood", 
-                            label = "Food level:", 
+                            label = "Min Food level:", 
                             choices = foodScoreLevel,
                             selected = foodScoreLevel[3]),
             # Walk Level
             sliderTextInput(inputId = "sliderWalk", 
-                            label = "Walk-friendly level:", 
+                            label = "Min Walk-friendly level:", 
                             choices = walkScoreLevel,
                             selected = walkScoreLevel[3]),
             # Price Level
@@ -101,10 +109,13 @@ ui = navbarPage(
                         label = "Price", 
                         min = 1, max = 300, step = 20,
                         pre = "$", sep = ",", value = c(80, 200)),
+
+            actionButton("buttonPlotAirbnb", "Show me the rooms!"),
             # DEBUG TEXTBOX
             # verbatimTextOutput("debugText"),
             # Plot Tempearture for the selected dates
-            plotOutput("graphTemp", height = 400)
+            plotOutput("graphTemp", height = 300)
+
             
             
             #### The following code was discarded due to lack of X-axis support and lack of viriance of rain data.
@@ -251,7 +262,7 @@ ui = navbarPage(
                 div(style="text-align:center",
                     textOutput("textPricePrediction"),
                     tags$head(tags$style("#textPricePrediction{color: red;
-                                 font-size: 20px;
+                                 font-size: 30px;
                                  font-style: italic;
                                  }"
                          )

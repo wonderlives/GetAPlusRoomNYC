@@ -157,7 +157,38 @@ server = function(input, output, session) {
     })
   
 #################################
-
+DT = data.table(type = c('Restaurant','Cafe','Entertainment','Business'),
+          amount = c(25, 25, 25, 30))
+  
+  output$plotgraph1 = renderGvis({ 
+  gvisPieChart(DT, options=list(
+    #slices="{4: {offset: 0.2}, 0: {offset: 0.3}}",
+    title='City popularity',
+    legend='type',
+    pieSliceText='value',
+    pieHole=0.2))
+  #plot(Pie)
+  })
+  
+  output$plotgraph2 = renderGvis({
+  gvisColumnChart(DT, options=list(
+    #slices="{4: {offset: 0.2}, 0: {offset: 0.3}}",
+    title='City popularity',
+    legend='type',
+    pieSliceText='value',
+    pieHole=0.2))
+   
+  })
+  
+  DT2 = data.table(type = c('Walk Score','Bike','Transit'),
+           amount = c(99, 80, 60))
+  
+  output$plotgraph3 = renderGvis({
+  gvisGauge(DT2, 
+        options=list(min=0, max=100, greenFrom=70,
+               greenTo=100, yellowFrom=30, yellowTo=70,
+               redFrom=0, redTo=30, width=400, height=300))
+  })
 ####################################
 
   

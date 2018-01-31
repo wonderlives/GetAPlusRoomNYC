@@ -9,18 +9,18 @@ source('dataPreparation.R')
 load("finalWeather.Rda")
 
 
-library(leaflet)
+library(leaflet) #
 library(googleway)
 library(RCurl)
 library(geojsonio)
 library(jsonlite)
 library(rgdal)
-library(shinythemes)
-library(shinyWidgets)
+library(shinythemes)#
+library(shinyWidgets)#
 library(ggmap)
 library(tidyverse)
 library(httr)
-library(emo)
+library(emo)#
 library(data.table)
 library(dplyr)
 library(geosphere)

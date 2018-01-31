@@ -32,14 +32,17 @@ server = function(input, output, session) {
     observeEvent(input$buttonSearchAddress, {
         if (address() != "") {
             print(address())
-            LmapLat <<- geocode(address())$lat
-            LmapLng <<- geocode(address())$lon
+            tempResult = google_geocode(address = address(), key = apiKeyGoogleMap)
+            LmapLat <<- tempResult$results$geometry$location$lat
+            LmapLng <<- tempResult$results$geometry$location$lng
+            #LmapLat <<- geocode(address())$lat
+            #LmapLng <<- geocode(address())$lon
             print(paste(LmapLat,LmapLng))
             leafletProxy("Lmap") %>% 
                 addPulseMarkers(
                     lng= LmapLng, lat=LmapLat,
                     label= address(),
-                    icon = makePulseIcon(heartbeat = 1))%>%
+                    icon = makePulseIcon(heartbeat = 1), layerId ='addRed', group ='Target')%>%
                 setView (
                     lng = LmapLng, lat = LmapLat, zoom = 15
                     )
@@ -93,6 +96,8 @@ server = function(input, output, session) {
     #     zoneLon = click$lng
     #     return (zoneLon)
     #     })
+    icon.pop <- pulseIcons(color = 'blue',
+                       heartbeat = 1)
     observeEvent(input$Lmap_click, {
     # Read click info
         #print("working")
@@ -109,10 +114,9 @@ server = function(input, output, session) {
                     print(address)
                 # use the proxy to save computation
                     leafletProxy("Lmap") %>% 
-                    addCircles(lng=zoneLon, lat=zoneLat, group='circles',
-                                weight=1, radius=100, color='black', fillColor='orange',
-                                popup=address, fillOpacity=0.5, opacity=1,
-                                layerId = 'dropPin') 
+                    addPulseMarkers(
+                    lng= zoneLon, lat=zoneLat,
+                    icon = icon.pop, layerId = 'addBlue', group = 'Second Target') 
             } else {
             return()
             }
@@ -135,11 +139,14 @@ server = function(input, output, session) {
             setView(lng = zoneLon, lat = zoneLat, zoom = 12) %>%
             addPulseMarkers(
                     lng= LmapLng, lat=LmapLat,
-                    icon = makePulseIcon(heartbeat = 1))%>%
-            addCircles(lng = zoneLon, lat = zoneLat, group='circles',
-            weight=1, radius=100, color='black', fillColor='orange',
-            popup=address, fillOpacity=0.5, opacity=1,
-            layerId = 'transitZone') %>% 
+                    icon = makePulseIcon(heartbeat = 1), layerId = 'addRed')%>%
+            addPulseMarkers(
+                    lng= zoneLon, lat=zoneLat,
+                    icon = icon.pop, layerId = 'addBlue')%>%
+            # addCircles(lng = zoneLon, lat = zoneLat, group='circles',
+            # weight=1, radius=100, color='black', fillColor='orange',
+            # popup=address, fillOpacity=0.5, opacity=1,
+            # layerId = 'transitZone') %>% 
             addPolygons(stroke = FALSE, smoothFactor = 0.5, 
                         fillOpacity = 0.8, group = "ployGroup")
             })
@@ -148,6 +155,61 @@ server = function(input, output, session) {
     observeEvent(input$buttonClearZone, {
         leafletProxy('Lmap') %>% hideGroup("ployGroup")
         })
+
+# AirBnB data
+# finalDataJan30
+    dfPointPlot = reactive({
+                walkD = match(input$sliderWalk, walkScoreLevel)
+                foodD = match(input$sliderFood, foodScoreLevel)
+                safeD = match(input$sliderSafety, safetyScoreLevel)
+                #print(paste(input$sliderWalk, walkD))
+                # print(paste(input$sliderFood,foodD))
+                # print(paste(input$sliderSafety, safeD))
+                result = finalDataJan30 %>%
+                    filter(room_type %in% input$checkboxRoomType & 
+                           price >= input$sliderPrice[1] &
+                           price <= input$sliderPrice[2] &
+                           walkScore >= (walkD*15) &
+                           Food >= foodPercentile[foodD] &
+                           crimeCount <= crimePercentile[safeD]) 
+                return (result)
+  })
+
+observeEvent(input$buttonPlotAirbnb,{
+    pal = colorFactor("RdYlBu", roomType) 
+    leafletProxy("Lmap",data = dfPointPlot()) %>% #don't forget ()
+      clearMarkerClusters() %>% 
+      clearMarkers() %>%
+      addPulseMarkers(
+                    lng= LmapLng, lat=LmapLat,
+                    label= address(),
+                    icon = makePulseIcon(heartbeat = 1), layerId ='addRed', group ='Target')%>%
+      # circle
+      addCircleMarkers(lng = ~longitude, lat = ~latitude, radius = 5,
+                        weight = 3, color=~pal(room_type),
+                        opacity= 1, 
+                 group = "CIRCLE",
+                 popup = ~paste('<b><font color="Black">','Listing Information','</font></b><br/>',
+                                'Room Type:', room_type,'<br/>',
+                                'Price:', price,'<br/>',
+                                'At:', neighbourhood, '<br/>',
+                                'Number of Reviews:', number_of_reviews,'<br/>')) %>% 
+      # cluster
+      addCircleMarkers(lng = ~longitude, lat = ~latitude, clusterOptions = markerClusterOptions(),
+                       group = "CLUSTER", layerId = "justClusters",
+                       popup = ~paste('<b><font color="Black">','Listing Information','</font></b><br/>',
+                                      'Room Type: ', room_type, '<br/>',
+                                      'Price:', price,'<br/>',
+                                      'At:', neighbourhood, '<br/>',
+                                      'Number of Reviews:', number_of_reviews,'<br/>')) %>% 
+      # circle/ cluster panel
+          addLayersControl(
+            #baseGroups = c("CIRCLE","CLUSTER"),
+            overlayGroups = c("CIRCLE","CLUSTER"),
+            options = layersControlOptions(collapsed = FALSE)
+         ) 
+    }
+    )
 
 ###################################################### Explore Map Page ######################################################
   
