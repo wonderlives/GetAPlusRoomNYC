@@ -1,7 +1,7 @@
 # Load data
-setwd("~/Shiny/rogerPro/")
-load("./data/finalWeather.Rda")
-load("./data/finalAirBnBdata.Rda")
+#setwd("~/Shiny/rogerPro/")
+load("data/finalWeather.Rda")
+load("data/finalAirBnBdata.Rda")
 
 # Load library
 library(shinythemes)	# Select theme

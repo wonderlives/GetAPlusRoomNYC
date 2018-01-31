@@ -14,7 +14,7 @@
 
 ##### Define website title and theme. #####
 ui = navbarPage(
-                title = paste("Get A+ Room NYC",emo::ji("poop")),
+                title = paste("Get A+ Room NYC",emo::ji("sunglasses")),
                 id    = "navPage",
                 theme = shinytheme("cerulean"),   
 ##### 1. Homepage: A gif bakcground with some quotes. #####

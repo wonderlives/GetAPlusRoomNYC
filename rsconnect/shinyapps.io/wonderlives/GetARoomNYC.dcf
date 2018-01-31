@@ -1,0 +1,13 @@
+name: GetARoomNYC
+title: GetARoomNYC
+username:
+account: wonderlives
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 267199
+bundleId: 1200891
+url: https://wonderlives.shinyapps.io/GetARoomNYC/
+when: 1517400234.31596
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: .RData|dataMining.R|dataPreparation.R|dropPinModule.R|FutureWork.md|global.R|googleVisDevelop.R|helperYelp.R|keyToInput.R|mergeFiles.R|ModuleExample.R|realTimeUpdate.R|reuseUiExample.R|serverFunction.R|updateCrime.R|weatherDataProcess.R|backUp/.DS_Store|backUp/BackUpVersion.R|backUp/Global.R|backUp/server.R|backUp/ui.R|dataset/airbnb_daily.csv|dataset/airbnb_detail.csv|dataset/airbnb_vis.csv|dataset/NYPD_Complaint_Data_Current_YTD.csv|dataset/weather.csv|finalTest/Untitled.R|finalTest/weather.csv|pics/beauty.jpg|pics/darkNYC.jpg|pics/snowNYC.jpg|data
